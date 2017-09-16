@@ -13,10 +13,15 @@ namespace Parcial2.Game
         private static Player instance;
 
         [SerializeField]
+        private BulletPoolManager pool;
+
+        [SerializeField]
         private ParticleSystem onKilledPS;
 
         [SerializeField]
         private Bullet bulletBase;
+        [SerializeField]
+        private Bullet specialBulletBase;
 
         private PlayerProfile playerProfile;
 
@@ -65,6 +70,8 @@ namespace Parcial2.Game
 
         private void OnDestroy()
         {
+            DisparoInput.EnDisparoNormal -= Shoot;
+            DisparoInput.EnDisparoEspecial -= ShootSpecial;
             instance = null;
         }
 
@@ -109,44 +116,89 @@ namespace Parcial2.Game
         // Use this for initialization
         private void Start()
         {
+            DisparoInput.EnDisparoNormal += Shoot;
+            DisparoInput.EnDisparoEspecial += ShootSpecial;
         }
+        
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Vector3 lookAtLocation = Vector3.zero;
-                //Debug.DrawRay(transform.position, Vector3.forward * 5F, Color.green, 5F);
-
-                Collider[] otherColliders = Physics.OverlapSphere(transform.position, 10F);
-
-                for (int i = 0; i < otherColliders.Length; i++)
-                {
-                    if (otherColliders[i].gameObject == gameObject)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        Enemy enemy = otherColliders[i].GetComponent<Enemy>();
-
-                        if (enemy != null)
-                        {
-                            lookAtLocation = enemy.transform.position;
-                            break;
-                        }
-                    }
-                }
-
-                if (lookAtLocation != Vector3.zero)
-                {
-                    transform.LookAt(lookAtLocation);
-                }
-
-                Bullet bulletInstance = Instantiate(bulletBase, transform.position + new Vector3(0F, 1F, 0F), transform.rotation);
-                bulletInstance.SetParams(50, 100, this.gameObject);
-                bulletInstance.Toss();
+                Shoot();
             }
+        }
+
+        private void Shoot()
+        {
+            Vector3 lookAtLocation = Vector3.zero;
+            //Debug.DrawRay(transform.position, Vector3.forward * 5F, Color.green, 5F);
+
+            Collider[] otherColliders = Physics.OverlapSphere(transform.position, 10F);
+
+            for (int i = 0; i < otherColliders.Length; i++)
+            {
+                if (otherColliders[i].gameObject == gameObject)
+                {
+                    continue;
+                }
+                else
+                {
+                    Enemy enemy = otherColliders[i].GetComponent<Enemy>();
+
+                    if (enemy != null)
+                    {
+                        lookAtLocation = enemy.transform.position;
+                        break;
+                    }
+                }
+            }
+
+            if (lookAtLocation != Vector3.zero)
+            {
+                transform.LookAt(lookAtLocation);
+            }
+
+            Bullet bulletInstance =
+                Instantiate(bulletBase, transform.position + new Vector3(0F, 1F, 0F), transform.rotation);
+            bulletInstance.SetParams(50, 100, this.gameObject);
+            bulletInstance.Toss();
+        }
+
+        private void ShootSpecial()
+        {
+            Vector3 lookAtLocation = Vector3.zero;
+            //Debug.DrawRay(transform.position, Vector3.forward * 5F, Color.green, 5F);
+
+            Collider[] otherColliders = Physics.OverlapSphere(transform.position, 10F);
+
+            for (int i = 0; i < otherColliders.Length; i++)
+            {
+                if (otherColliders[i].gameObject == gameObject)
+                {
+                    continue;
+                }
+                else
+                {
+                    Enemy enemy = otherColliders[i].GetComponent<Enemy>();
+
+                    if (enemy != null)
+                    {
+                        lookAtLocation = enemy.transform.position;
+                        break;
+                    }
+                }
+            }
+
+            if (lookAtLocation != Vector3.zero)
+            {
+                transform.LookAt(lookAtLocation);
+            }
+
+            Bullet bulletInstance = 
+                Instantiate(specialBulletBase, transform.position + new Vector3(0F, 1F, 0F), transform.rotation);
+            bulletInstance.SetParams(50, 100, this.gameObject);
+            bulletInstance.Toss();
         }
 
         private void OnDrawGizmosSelected()

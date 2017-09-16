@@ -6,9 +6,12 @@ namespace Parcial2.Game
     [RequireComponent(typeof(Collider))]
     public class Bullet : MonoBehaviour
     {
+        public delegate void Desaparecida();
+        public static event Desaparecida EnDesaparecer;
+
         private Rigidbody myRigidBody;
         private float speed;
-        private int damage;
+        protected int damage;
 
         private GameObject instigator;
 
@@ -22,6 +25,8 @@ namespace Parcial2.Game
         public void Toss()
         {
             myRigidBody.AddForce(transform.forward * speed, ForceMode.VelocityChange);
+
+            Invoke("DestroyMe", 1f);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -42,7 +47,7 @@ namespace Parcial2.Game
 
             if (instigator != other.gameObject)
             {
-                Destroy(gameObject); 
+                DestroyMe();
             }
         }
 
@@ -52,9 +57,22 @@ namespace Parcial2.Game
             myRigidBody = GetComponent<Rigidbody>();
         }
 
+        private void DestroyMe()
+        {
+            Destroy(gameObject);
+        }
+
         private void OnDestroy()
         {
+            EnDesaparecer();
+            CambiarParametrosAlDesaparecer();
+
             myRigidBody = null;
+        }
+
+        protected virtual void CambiarParametrosAlDesaparecer()
+        {
+            //Aqui no va nada
         }
     } 
 }

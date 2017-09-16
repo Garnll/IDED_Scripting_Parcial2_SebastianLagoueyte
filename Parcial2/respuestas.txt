@@ -1,1 +1,43 @@
-[Inserte aquí las respuestas a las preguntas del numeral 1]
+﻿[Inserte aquí las respuestas a las preguntas del numeral 1]
+
+a.
+Cuando se hunde la tecla de disparo (Espacio, en este caso), se crea un Vector3 lookAtLocation y se hace un OverlapSphere con radio 10.
+Este OverlapSphere lanza una "esfera" alrededor del jugador que detecta todos los colliders que se encuentren dentro de ella.
+Lo que hace Player es que busca el componente "Enemy" dentro de los gameobjects de los colliders, y si este existe, hace que lookAtLocation sea la posición de este collider.
+Todo se hace en un for, el cual se sale de sus repeticiones en cuanto cambie lookAtLocation 1 vez.
+Para terminar, si este lookAtLocation no está en 0,0,0, el Player hace un transform.LookAt mire hacia la posición dada por lookAtLocation.
+En resumen, el Player usa OverlapSphere para detectar la posición de un enemigo y usa LookAt para rotar su tranform y poder dispararle
+
+b.
+Si. Existen varios posibles casos. El primero y más obvio es si Player deja de existir, en cuyo caso el enemigo no tendría hacia donde moverse.
+El segundo caso, que se ve en el programa, es cuando la velocidad es 0, en cuyo caso "intenta" moverse, pero la multiplicación necesaria para cambiar su posición siempre da 0.
+Y el ultimo caso, implementado conscientemente, es cuando el booleando canMove esté en falso, que ocurre cuando colisiona con el jugador. Si este booleano es falso, ignorará su propio movimiento.
+
+c.
+Para instanciar las balas se están usando Prefabs y el metodo Instantiate, que crea un clon de la bala original en una posición y rotación deseadas.
+Desde el Inspector se le dio la referencia al prefab de Bullet, por lo cual es capaz de instanciar su script y que la bala completa se cree.
+
+d.
+El Enemigo tiene dos "Propiedades", Atk y HP, con la caracteristica de que su field es public, más solo su get es público mientras que su set es protegido.
+Es decir, cualquiera que tenga referencia al script de Enemy puede ver su Atk y su HP, pero solo él mismo y sus subclases pueden cambiar estos valores.
+Estas dos propiedades, Atk y HP, son integers o enteros, por lo cual solo pueden recibir valores númericos enteros, y son utilizadas como un valor de "ataque" que se le puede hacer al jugador, y como una "vida" que tiene individualmente cada instancia del enemigo, respectivamente.
+
+Hablando del resto de atributos, que tecnicamente se les puede llamar Propiedades, tenemos tier, newColor, bodyMesh, speed y canMove.
+tier es privado, solo puede cambiarse desde el script propio, más se puede cambiar desde el inspector por su SerializeField.
+Es de tipo enumerable Tier, que se creó en la propia clase, y puede tener los valores de Base, Low, Mid y High, que sirven para indicar la "dureza" del enemigo. Es decir, se usan para indicar cuanto Atk y HP tienen.
+
+newColor es publico, puede cambiarse desde cualquier script que accese a él, y se puede cambiar desde el inspector.
+Es de tipo Color, por lo cual representa un dato RGBA (de 0 a 1 en Red, Green, Blue y Alpha), el cual es después asignado al material de la instancia del enemigo.
+
+bodyMesh es igualmente publico, por lo cual es asignable desde otros scripts que no sean subclases de Enemy, e igualmente puede asignarse desde el inspector
+Es de tipo SkinnedMeshRenderer, lo cual le cambia su forma a la que se le asigne.
+
+speed es privado, solo se puede cambiar desde el script propio, pero puede asigarse desde el inspector.
+Es un float, o flotante, por lo cual sus valores son decimales. Es usado para indicarle al Enemigo a qué velocidad se va a mover.
+
+Por ultimo, canMove es privado igualmente, solo accesible desde la clase con posibilidad de asignarse desde el inspector.
+Es un booleando, los cuales solo pueden ser true o false, y está usado para dejar que el enemigo se mueva, o no.
+
+e.
+El instigator sirve para que la bala "sepa" quien fue el que la disparó y, en caso de que algo entre en su trigger, detecte si por algún error no entró al mismo gameObject que la disparó.
+En caso de que el gameObject que entró a su trigger no sea el mismo que la disparó, es decir, el instigator, la bala se destruye.

@@ -31,6 +31,12 @@ namespace Parcial2.Game
 
         private bool canMove = true;
 
+        public void SetParameters(int newAtk, int newHP)
+        {
+            Atk += newAtk;
+            HP += newHP;
+        }
+
         public void ReceiveDamage(int damage, bool collidedWithPlayer = false)
         {
             Debug.Log(string.Format("[{0}] received [{1}] damage pts, remaining [{2}] HP", name, damage, HP));
