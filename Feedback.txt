@@ -1,0 +1,19 @@
+Feedback
+
+1. Muy largo, pero sí. (0.3)
+2. OK (0.3)
+3. OK (0.3)
+4. (0.1)
+  * 'Atk' y 'Hp' como campos son protegidos. Cuando definimos propiedades con get público y set con otro nivel de protección, el  campo asociado siempre será el de menor nivel de protección.
+  * OJO! Enumerable != Enum. Los enumerables en C# son otras cosas.
+  * canMove NUNCA puede asignarse desde inspector. No es un campo serializado y es privado.
+5. OK (0.3)
+
+Código
+1. OK (0.5)
+2. OK (0.5)
+3. OK (1.0)
+4. OK (1.0)
+5. Podría haber servido polimorfismo. Lo otro es... Por qué la capacidad de las listas está quemada? Además, el pool no recicla las balas. El player tampoco utiliza este pool para nada (0.1)
+
+Total: 4.4
